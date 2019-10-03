@@ -1,0 +1,1 @@
+# repozitár pre minisofty 
