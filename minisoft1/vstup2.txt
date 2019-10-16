@@ -1,0 +1,5 @@
+http://davinci.fmph.uniba.sk/~bator3/school/svp/images
+a->ab
+b->cc
+c->ac
+ac->b

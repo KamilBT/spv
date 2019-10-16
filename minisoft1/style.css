@@ -1,0 +1,166 @@
+html,body{
+	position: relative;
+	height: 100%;
+	min-height: 100%;
+	font-family: 'Raleway', sans-serif;
+	font-size: 16pt;
+  font-weight:300;
+}
+h3{ padding: 0 10px;}
+*{
+	background-position: center center;
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+#game {
+  display:block;
+  position:relative;
+  width: 90%;
+  margin: 0 auto;
+  height: auto;
+  background: lightblue;
+  border-radius:20px;
+}
+#menu {
+  display:block;
+  position:relative;
+  height: 30px;
+  padding:10px;}
+#menu button {
+float: left;
+background: none;
+border: 1px solid black;
+width: 100px;
+font-size: 16px;
+/*margin:10px;*/
+border-radius:20px;
+}
+.clear{
+  display: block;
+	clear: both;
+	float: none;
+}
+.leftside, .rightside {
+  display:block;
+  position:relative;
+  min-width:300px;
+  border-radius:20px; 
+}
+.leftside{ 
+  width:30%;
+  float:left;
+}
+.rightside{ 
+  width:68%;
+  float:left;
+  min-height:740px;
+  border: 2px solid darkgray;
+}
+#aktWord, #aktRule{
+   display:block;
+   position:relative;
+   width:50%;
+   float:left;
+   border-radius:10px;
+}
+
+.pravidlo, #start, #draggable, #goal{
+  border: 1px solid black;
+  width:80%;
+  min-width:100px;
+  margin: 0 auto;
+  margin-top:10px;
+  border-radius:20px;
+  padding:5px;
+}
+.pravidlo {height:50px;}
+.pravidlo:hover{ cursor:pointer;}
+#draggable, #start, #goal { min-height:80px;}
+#draggable img:hover, #start img{cursor:pointer;}
+#launch {
+   transition: all 0.5s ease;
+   -webkit-transition: all 0.5s ease; 
+    margin: 0 auto;
+    width: 48px;
+    height: 48px;
+    background-image: url(images/arrow.png);}
+#launch:hover{ cursor:pointer;}
+#launch.hide{ height:0; width:0;}
+
+.rule_arrow{ 
+  margin-left:20px; 
+  margin-right:20px;
+}
+.aktw{ padding:5px; border: 1px solid black; margin-bottom:20px;}
+.aktrule{ padding:5px; margin-top:20px;}
+
+
+
+#settings-wrap{display:none; left:100px; top:30px;}
+#settings-wrap.open{display:block;
+position:absolute; z-index:5; background:lightskyblue; 
+padding: 10px;}
+
+#aktRule { transition: all 0.5s ease; -webkit-transition: all 0.5s ease;}
+#aktRule.hidden {opacity:0;}
+
+/* ------------------------------------------------------ checkbox*/
+/* The container */
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
