@@ -50,12 +50,12 @@ document.querySelector("#file-input").addEventListener("change", function() {
   reader.onload = function(){
       var data = reader.result;
       var res = data.split("\n");
-      console.log(res);
+      //console.log(res);
       path = res[0];
-      
+
+      setRules(res, path);
       setImages(path);
-      setRules(res, path)
-      
+
     };
   reader.readAsText(file);
 });
@@ -64,19 +64,19 @@ document.querySelector("#file-input").addEventListener("change", function() {
 
 //NASTAVENIE TLACIDIEL - PRAVIDLA
 function setRules(data, path){
-  $("#rules").html("");  
+  $("#rules").html("");
   console.log(data);
   for (var j=1; j<data.length; j++){
     //premazanie popisu pravidlo
     if(data[j].length > 0){
       $("#rules").append("<div class='pravidlo' id='p"+j+"'>Pravidlo"+j+"</div>");
       $("#p"+j+"").html("");
-     
+
       //split podla sipky
       var splitdata = data[j].split("->");
       splitdata[0] = splitdata[0].trim();
       splitdata[1] = splitdata[1].trim();
-      
+
       //znazornenie pravidiel v hre
       for(var i=0; i<splitdata[0].length; i++){
         $("#p"+j+"").append("<img src='"+path+"/"+splitdata[0].charAt(i)+".png'/>");
@@ -98,7 +98,17 @@ function setRules(data, path){
 //nastavenie obrazkov
 function setImages(path){
   html = "";
-  for(i=0; i<3; i++){
+  //najdenie najvacieho pismena v pravidlach
+  var alphabet = "a";
+  for(i=0; i<rules.length; i++){
+    var akt = rules[i].join();
+    for (j=0; j<akt.length; j++){
+      if (akt.charCodeAt(j) > alphabet.charCodeAt(0))
+        alphabet = akt[j];
+    }
+  }
+  //nastavenie obrazkov od a po najvecsie pismeno
+  for(i=0; i<=alphabet.charCodeAt(0) - 97; i++){
      var akt = String.fromCharCode(97+i);
     html +="<img id='drag"+akt+"' data-val='"+akt+"' src='"+path+"/"+akt+".png' draggable='true' ondragstart='drag(event)' width='50' height='50'>";
   }
@@ -112,47 +122,47 @@ $(document).on('click', '.pravidlo', function(){
      var aktw;
      if(aktWordsUser.length == 0) aktw = startw;
      else aktw = aktWordsUser[aktWordsUser.length-1];
-     
-     console.log(rules, $(this).attr("data-rule"));   
+
+     console.log(rules, $(this).attr("data-rule"));
      var usedRule = rules[$(this).attr("data-rule") - 1];
      console.log(usedRule);
      var toReplace = usedRule[0];
-   
+
      //ak pravidlo je uplatnitelne
      if(aktw.indexOf(toReplace) >= 0){
         //prepis akt slova a zapisanie do pola
         aktw = aktw.replace(usedRule[0], usedRule[1]);
         usedRulesUser.push(usedRule);
         aktWordsUser.push(aktw);
-        
+
         //zobrazenie vzniknuteho slova
         var wordWrap = $("<div class='aktw last'></div>");
         for(var i=0; i<aktw.length; i++){
            $(wordWrap).append("<img src='"+path+"/"+aktw.charAt(i)+".png'/>");
         }
         $("#aktWord").append(wordWrap);
-        
+
         //zobrazenie pouziteho pravidla
         var ruleWrap = $("<div class='aktrule'></div>");
         for(var i=0; i<usedRule[0].length; i++){
-           $(ruleWrap).append("<img src='"+path+"/"+usedRule[0].charAt(i)+".png'/>"); 
+           $(ruleWrap).append("<img src='"+path+"/"+usedRule[0].charAt(i)+".png'/>");
         }
         $(ruleWrap).append("<img src='images/arrow_black.png'/>");
         for(var i=0; i<usedRule[1].length; i++){
-           $(ruleWrap).append("<img src='"+path+"/"+usedRule[1].charAt(i)+".png'/>"); 
+           $(ruleWrap).append("<img src='"+path+"/"+usedRule[1].charAt(i)+".png'/>");
         }
         $("#aktRule").append(ruleWrap);
-        
+
         //zrusenie classy last pri predchodcovi
         $(".aktw.last").prev().removeClass('last');
-        
+
         //kontrola pre goal
         console.log(aktw, generatedGoals[generatedGoals.length-1]);
         if(aktw == generatedGoals[generatedGoals.length-1])
-          alert("Vitaz");   
+          alert("Vitaz");
      }
      else alert("teraz toto pravidlo použiť nemôžeš, skús iné pravidlo");
-       
+
   }
   else alert("najrpv vytvor počiatočný vzor");//alert("aktuálny vzor nespĺňa kliknuté pravidlo, skús iné pravidlo");
 });
@@ -176,8 +186,8 @@ $("#show-rules").on('change', function(){
     $("#aktRule").removeClass('hidden');
   }
   else $("#aktRule").addClass('hidden');
-});      
- 
+});
+
 });
 
 
@@ -197,39 +207,39 @@ function drop(ev) {
   ev.preventDefault();
   var data = ev.dataTransfer.getData("text");
   ev.target.appendChild(document.getElementById(data));
-  
+
   //vytvorenie kopie, ktora ma obmenene id a zruseny event na mazanie
-  
+
   var cln = document.getElementById(data).cloneNode(true);
   cln.setAttribute("id", cln.getAttribute("id")+count);
   cln.removeAttribute("onclick");
   document.getElementById("draggable").appendChild(cln);
-  
+
   //zobrazenie sipky pre start po pridani aspon jedneho komponentu slova
   var wordImage = document.getElementById("start").getElementsByTagName('img');
-  if(wordImage.length == 1) document.getElementById("launch").classList.remove("hide");   
+  if(wordImage.length == 1) document.getElementById("launch").classList.remove("hide");
 }
 
 //mazanie kliknuteho prvku v poli pri tvoreni slova
-function remove(ev){ 
+function remove(ev){
   ev.target.parentNode.removeChild(ev.target);
   var wordImage = document.getElementById("start").getElementsByTagName('img');
-  if(wordImage.length == 0) document.getElementById("launch").classList.add("hide");  
+  if(wordImage.length == 0) document.getElementById("launch").classList.add("hide");
 }
 
 //generovanie startovacieho slova
 function getStartWord(){
   var wordImage = document.getElementById("start").childNodes;
-  //console.log(wordImage); 
-  
+  //console.log(wordImage);
+
   var word = '';
   //pridanie start slova do plochy s riesenim podla zadania
   var wordWrap = $("<div class='aktw first'></div>");
-  
+
   for(var i=0; i<wordImage.length; i++){
       word += wordImage[i].getAttribute("data-val");
-      $(wordWrap).append("<img src='"+path+"/"+wordImage[i].getAttribute("data-val")+".png'/>"); 
-  }  
+      $(wordWrap).append("<img src='"+path+"/"+wordImage[i].getAttribute("data-val")+".png'/>");
+  }
   $("#aktWord").html('').append(wordWrap);
   return word;
 }
@@ -237,7 +247,7 @@ function getStartWord(){
 // ZAHAJENIE HRY  --------------------------------------------------------------
 
 function generatedGoal(startw, lastw, rules){
-  // pripadna kontrola aby negenerovalo znova to iste co predtym - 
+  // pripadna kontrola aby negenerovalo znova to iste co predtym -
 }
 
 //reset hodnot
@@ -247,7 +257,7 @@ function resetValues(){
   usedRules = [];         // pole pre vyklikane pravidla pri generovani
   aktWords = [];
   usedRulesUser = [];         // pole pre vyklikane pravidla -user
-  aktWordsUser = []; 
+  aktWordsUser = [];
 }
 
 //reset spolu so startovnymi slovami
@@ -270,7 +280,7 @@ function startGame(){
     console.log(rules);
     for(var i=0; i<set_n; i++){
        //var apply = 1; //pomocna premenna
-      //nahodne zvolene pravidlo 
+      //nahodne zvolene pravidlo
       //kym sa neaplikuje aspon jedno pravidlo
       var limit = 0;
       while(limit <500){
@@ -282,9 +292,9 @@ function startGame(){
            aktw = aktw.replace(rule[0], rule[1]);
            usedRules.push(rule);
            aktWords.push(aktw);
-           break;                
-        }      
-      }       
+           break;
+        }
+      }
      }
      aktw=aktw.trim();
      console.log(usedRules);
@@ -295,4 +305,3 @@ function startGame(){
      }
   }
 }
-

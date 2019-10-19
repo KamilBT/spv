@@ -1,61 +1,62 @@
 <!doctype html>
 <html lang="sk-SK">
-<head>
-<title>Minisoft 1</title>
-<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,700,900&amp;subset=latin-ext" rel="stylesheet" />
-<link rel="stylesheet" href="style.css">
-<script src="jquery.js"></script>
-</head>
-<body>
+  <head>
+    <meta charset="utf-8">
+    <title>Minisoft 1</title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,700,900&amp;subset=latin-ext" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+    <script src="js/jquery.js"></script>
+  </head>
+  <body>
 
-<p>Minisoft 1</p>
-<div id="game">
-  <div id="menu">
-    <button id="subor">Súbor</button>  <input id="file-input" type="file" name="name" style="display: none;" />
-    <button id="settings">Nastavenia</button>
-    <div id="settings-wrap">
-      <label class="container">Zobraziť postup
-        <input type="checkbox"  id="show-rules" checked>
-        <span class="checkmark"></span>
-      </label>
+  <p>Minisoft 1</p>
+  <div id="game">
+    <div id="menu">
+      <button id="subor">Súbor</button>  <input id="file-input" type="file" name="name" style="display: none;" />
+      <button id="settings">Nastavenia</button>
+      <div id="settings-wrap">
+        <label class="container">Zobraziť postup
+          <input type="checkbox"  id="show-rules" checked>
+          <span class="checkmark"></span>
+        </label>
+      </div>
+      <button onclick="resetGame();">Nové slovo</button>
+      <div class="clear"></div>
     </div>
-    <button onclick="resetGame();">Nové slovo</button>
+    <div class="leftside">
+      <div class="clear"></div>
+      <h3>Pravidlá</h3>
+       <div id="rules">
+        <!--div class="pravidlo" id="p1">Pravidlo1</div>
+        <div class="pravidlo" id="p2">Pravidlo2</div>
+        <div class="pravidlo" id="p3">Pravidlo3</div-->
+       </div>
+      <h3>Dostupné obrázky</h3>
+      <div id="draggable">
+        <!--img id="draga" src="images/a.png" draggable="true" ondragstart="drag(event)" width="50" height="50">
+        <img id="dragb" src="images/b.png" draggable="true" ondragstart="drag(event)" width="50" height="50">
+        <img id="dragc" src="images/c.png" draggable="true" ondragstart="drag(event)" width="50" height="50"-->
+      </div>
+      <div>
+      <h3>Počiatočný vzor</h3>
+         <div id="start" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+         <div id="launch" class="hide" onclick="startGame()"></div>
+      </div>
+      <div>
+        <h3>Cieľový vzor</h3>
+        <div id="goal"></div>
+      </div>
+      <br>
+    </div>
+    <!-- plochy pre riesenie a postup-->
+    <div class="rightside">
+       <div id="aktWord"></div>
+       <div id="aktRule"></div>
+       <div class="clear"></div>
+    </div>
     <div class="clear"></div>
   </div>
-  <div class="leftside">
-    <div class="clear"></div>
-    <h3>Pravidlá</h3>
-     <div id="rules">
-      <!--div class="pravidlo" id="p1">Pravidlo1</div>
-      <div class="pravidlo" id="p2">Pravidlo2</div>
-      <div class="pravidlo" id="p3">Pravidlo3</div-->
-     </div>
-    <h3>Dostupné obrázky</h3>
-    <div id="draggable">
-      <!--img id="draga" src="images/a.png" draggable="true" ondragstart="drag(event)" width="50" height="50">
-      <img id="dragb" src="images/b.png" draggable="true" ondragstart="drag(event)" width="50" height="50">
-      <img id="dragc" src="images/c.png" draggable="true" ondragstart="drag(event)" width="50" height="50"-->
-    </div>
-    <div>
-    <h3>Počiatočný vzor</h3>
-       <div id="start" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-       <div id="launch" class="hide" onclick="startGame()"></div>
-    </div>
-    <div>
-      <h3>Cieľový vzor</h3>
-      <div id="goal"></div>
-    </div>
-    <br>
-  </div>
-  <!-- plochy pre riesenie a postup-->
-  <div class="rightside">
-     <div id="aktWord"></div>
-     <div id="aktRule"></div>
-     <div class="clear"></div>
-  </div>
-  <div class="clear"></div>
-</div>
-<script src="script.js"></script>
+  <script src="js/script.js"></script>
 
-</body>
+  </body>
 </html>

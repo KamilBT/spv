@@ -44,13 +44,13 @@ border-radius:20px;
   display:block;
   position:relative;
   min-width:300px;
-  border-radius:20px; 
+  /*border-radius:20px; */
 }
-.leftside{ 
+.leftside{
   width:30%;
   float:left;
 }
-.rightside{ 
+.rightside{
   width:68%;
   float:left;
   min-height:740px;
@@ -79,7 +79,7 @@ border-radius:20px;
 #draggable img:hover, #start img{cursor:pointer;}
 #launch {
    transition: all 0.5s ease;
-   -webkit-transition: all 0.5s ease; 
+   -webkit-transition: all 0.5s ease;
     margin: 0 auto;
     width: 48px;
     height: 48px;
@@ -87,8 +87,8 @@ border-radius:20px;
 #launch:hover{ cursor:pointer;}
 #launch.hide{ height:0; width:0;}
 
-.rule_arrow{ 
-  margin-left:20px; 
+.rule_arrow{
+  margin-left:20px;
   margin-right:20px;
 }
 .aktw{ padding:5px; border: 1px solid black; margin-bottom:20px;}
@@ -98,7 +98,7 @@ border-radius:20px;
 
 #settings-wrap{display:none; left:100px; top:30px;}
 #settings-wrap.open{display:block;
-position:absolute; z-index:5; background:lightskyblue; 
+position:absolute; z-index:5; background:lightskyblue;
 padding: 10px;}
 
 #aktRule { transition: all 0.5s ease; -webkit-transition: all 0.5s ease;}
