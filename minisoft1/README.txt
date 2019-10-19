@@ -1,7 +1,7 @@
 PRVÝ MINISOFT
 
 Spustenie
-- pre spustenie stačí otvoriť index.hmtml, netreba k tomu server
+- pre spustenie stačí otvoriť index.hmtml (treba stiahnuť celý priečinok minisoft1)
 
 Vstupný súbor
 - pri testovaní vlastných vstupných text súborov mimo projektu je nutné dať obrázky 
