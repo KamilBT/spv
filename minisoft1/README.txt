@@ -1,23 +1,14 @@
-PRVÝ MINISOFT
+PRVY MINISOFT - FINAL
 
 Spustenie
-- pre spustenie stačí otvoriť index.hmtml (treba stiahnuť celý priečinok minisoft1)
+- pre spustenie staci otvorit hra.hmtml (je potrebny cely priecinok bez presuvania suborov v nom)
+- bezi na chrome, firefoxe, edge ,IE
 
-Vstupný súbor
-- pri testovaní vlastných vstupných text súborov mimo projektu je nutné dať obrázky 
-niekde na školský/iný server(js načíta web lokalitu priečinku, napr http://davinci.fmph.uniba.sk/~priezvisko/svp/images) 
-alebo vytvoriť podpriečinok s obrázkami v projekte
-
-Ovládanie
--inak ovládanie je podľa zadania, jedine čo je pozmenené je že šípka sa zobrazí
-až pri pridaní obrázkov do štartovacieho slova
-
--zatiaľ nie je kontrola počtu klikaní pravidiel (prípad kedy už nie je možnosť dosiahnuť cieľový vzor), 
-no je možnosť zmazať posledne použité pravidlo klikom na (posledne)vygenerované slovo v pravej časti
-
-Generovanie slova
-- pre rýchle testovanie je zatiaľ nastavené, aby cieľové slovo bolo vygenerované
-aplikovaním 3 pravidiel
-
-Víťazná podmienka
-- momentálne riešené cez alert dialog, čiže sa zobrazí pred zobrazením posledne generovaného slova podľa pravidla
+update
+  - po zahajeni hry uz nie je mozne tahat obrazky z / do startovacieho slova
+  - po vitazstve uz nie je mozne klikat na pravidla, je to resetovane po stlaceni tlacidla nova hra
+  - nastavenie zobrazenia postupu korektne skryje slova, je zachovana funkcnost odoberania posledne pouziteho pravidla
+  
+  - pridanie levelov - po uspenom ukonceni je potrebne aplikovat pravidlo navyse, level 1 potrebuje 3 pravidla
+  - tahanie obrazkov z vyberu nemeni ich poradie
+  - pri vitazstve je pridany obrazok
