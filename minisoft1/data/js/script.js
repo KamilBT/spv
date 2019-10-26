@@ -15,7 +15,7 @@ var usedRulesUser = [];         // pole pre vyklikane pravidla
 var aktWordsUser = [];          //pole pre prechod modifikovanych slov
 
 $(document).ready(function() {
-
+localStorage.setItem('MSlevel', '1');
 //okno pre vybratie suboru
 $("#subor").on("click", function() {
     $("#file-input").trigger("click");
@@ -23,6 +23,30 @@ $("#subor").on("click", function() {
 
 $("#settings").on("click", function() {
     $("#settings-wrap").toggleClass("open");
+});
+
+//sipka pre spustenie hry
+$("#launch").on("click", function(){
+  //ak je startovacie neni prilis dlhe
+  if($("#start img").length <=5) {
+    $(this).addClass("hide");
+    //zrusenie tahania obrazkov po generovani slova
+    $("#start img").each(function(){
+      $(this).removeAttr('onclick').attr('draggable', false);
+    });
+    //zrusenie tahania obrazkov
+    $("#draggable img").each(function(){
+      $(this).attr('draggable', false);
+    });
+    localStorage.setItem('MShra','start');
+  }
+});
+
+//schovanie menu pri kliku inde na stranku
+$(document).on("click", function(e){
+  if(e.target.id != "settings" && $(e.target).closest("#settings-wrap").length === 0 ){
+      $("#settings-wrap").removeClass("open");
+  }
 });
 
 //nacitanie dat zo suboru
@@ -79,12 +103,12 @@ function setRules(data, path){
 
       //znazornenie pravidiel v hre
       for(var i=0; i<splitdata[0].length; i++){
-        $("#p"+j+"").append("<img src='"+path+"/"+splitdata[0].charAt(i)+".png'/>");
+        $("#p"+j+"").append("<img src='"+path+"/"+splitdata[0].charAt(i)+".png' draggable='false' width='40' height='40'/>");
       }
-      $("#p"+j+"").append("<img class='rule_arrow' src='images/arrow_black.png'/>");
+      $("#p"+j+"").append("<img class='rule_arrow' src='data/arrow_black.png' draggable='false' width='40' height='40'/>");
       for(var i=0; i<splitdata[1].length; i++){
         //console.log(splitdata[1]);
-        $("#p"+j+"").append("<img src='"+path+"/"+splitdata[1].charAt(i)+".png'/>");
+        $("#p"+j+"").append("<img src='"+path+"/"+splitdata[1].charAt(i)+".png' draggable='false' width='40' height='40'/>");
       }
       //pridanie hodnot do elemntu s pravidlami
       //$("#p"+j+"").attr('data-from', splitdata[0]).attr('data-to', splitdata[1]);
@@ -110,82 +134,114 @@ function setImages(path){
   //nastavenie obrazkov od a po najvecsie pismeno
   for(i=0; i<=alphabet.charCodeAt(0) - 97; i++){
      var akt = String.fromCharCode(97+i);
-    html +="<img id='drag"+akt+"' data-val='"+akt+"' src='"+path+"/"+akt+".png' draggable='true' ondragstart='drag(event)' width='50' height='50'>";
+    html +="<img id='drag"+akt+"' data-val='"+akt+"' src='"+path+"/"+akt+".png' draggable='true' ondragstart='drag(event)' width='40' height='40'>";
   }
   $("#draggable").html(html);
 }
 
 //klikanie na pravidla
 $(document).on('click', '.pravidlo', function(){
-  if ($("#goal").children().length >0){
-     //za kazdym klikom treba vratit posledne slovo, a na zaciatku to je teda startw
-     var aktw;
-     if(aktWordsUser.length == 0) aktw = startw;
-     else aktw = aktWordsUser[aktWordsUser.length-1];
+  //ak boli neboli pravidla blokovane po uspesnej hre
+  if(localStorage.getItem('MShra') != "stop"){
+    //ak je vytvorene cielove slovo
+    if ($("#goal").children().length >0){
+      if($('.aktw').length < 10){
+       //za kazdym klikom treba vratit posledne slovo, a na zaciatku to je teda startw
+       var aktw;
+       if(aktWordsUser.length == 0) aktw = startw;
+       else aktw = aktWordsUser[aktWordsUser.length-1];
 
-     console.log(rules, $(this).attr("data-rule"));
-     var usedRule = rules[$(this).attr("data-rule") - 1];
-     console.log(usedRule);
-     var toReplace = usedRule[0];
+       console.log(rules, $(this).attr("data-rule"));
+       var usedRule = rules[$(this).attr("data-rule") - 1];
+       console.log(usedRule);
+       var toReplace = usedRule[0];
 
-     //ak pravidlo je uplatnitelne
-     if(aktw.indexOf(toReplace) >= 0){
-        //prepis akt slova a zapisanie do pola
-        aktw = aktw.replace(usedRule[0], usedRule[1]);
-        usedRulesUser.push(usedRule);
-        aktWordsUser.push(aktw);
+       //ak pravidlo je uplatnitelne
+       if(aktw.indexOf(toReplace) >= 0){
+          //prepis akt slova a zapisanie do pola
+          aktw = aktw.replace(usedRule[0], usedRule[1]);
+          usedRulesUser.push(usedRule);
+          aktWordsUser.push(aktw);
 
-        //zobrazenie vzniknuteho slova
-        var wordWrap = $("<div class='aktw last'></div>");
-        for(var i=0; i<aktw.length; i++){
-           $(wordWrap).append("<img src='"+path+"/"+aktw.charAt(i)+".png'/>");
-        }
-        $("#aktWord").append(wordWrap);
+          //zobrazenie vzniknuteho slova
+          if(!$("#show-rules").prop('checked')) {
+            $(".aktw.last").addClass('hidden')
+          }
+          var wordWrap = $("<div class='aktw last'></div>");
+          for(var i=0; i<aktw.length; i++){
+             $(wordWrap).append("<img src='"+path+"/"+aktw.charAt(i)+".png' draggable='false' width='40' height='40' />");
+          }
+          $("#aktWord").append(wordWrap);
 
-        //zobrazenie pouziteho pravidla
-        var ruleWrap = $("<div class='aktrule'></div>");
-        for(var i=0; i<usedRule[0].length; i++){
-           $(ruleWrap).append("<img src='"+path+"/"+usedRule[0].charAt(i)+".png'/>");
-        }
-        $(ruleWrap).append("<img src='images/arrow_black.png'/>");
-        for(var i=0; i<usedRule[1].length; i++){
-           $(ruleWrap).append("<img src='"+path+"/"+usedRule[1].charAt(i)+".png'/>");
-        }
-        $("#aktRule").append(ruleWrap);
+          //zobrazenie pouziteho pravidla
+          var ruleWrap = $("<div class='aktrule'></div>");
+          for(var i=0; i<usedRule[0].length; i++){
+             $(ruleWrap).append("<img src='"+path+"/"+usedRule[0].charAt(i)+".png' draggable='false' width='40' height='40' />");
+          }
+          $(ruleWrap).append("<img src='data/arrow_black.png' draggable='false' width='40' height='40'/>");
+          for(var i=0; i<usedRule[1].length; i++){
+             $(ruleWrap).append("<img src='"+path+"/"+usedRule[1].charAt(i)+".png' draggable='false' width='40' height='40'/>");
+          }
+          $("#aktRule").append(ruleWrap);
 
-        //zrusenie classy last pri predchodcovi
-        $(".aktw.last").prev().removeClass('last');
+          //zrusenie classy last pri predchodcovi
+          $(".aktw.last").prev().removeClass('last');
 
-        //kontrola pre goal
-        console.log(aktw, generatedGoals[generatedGoals.length-1]);
-        if(aktw == generatedGoals[generatedGoals.length-1])
-          alert("Vitaz");
-     }
-     else alert("teraz toto pravidlo použiť nemôžeš, skús iné pravidlo");
-
+          //kontrola pre goal
+          console.log(aktw, generatedGoals[generatedGoals.length-1]);
+          if(aktw == generatedGoals[generatedGoals.length-1]){
+            $('.pravidlo').each(function(){
+              $(this).addClass('gameStop')
+            });
+            localStorage.setItem('MShra', 'stop');
+            var lv = localStorage.getItem('MSlevel');
+            lv = parseInt(lv) + 1;
+            localStorage.setItem('MSlevel', lv);
+            $("#win").toggleClass('disp');
+            //alert("Vitaz");
+          }
+       }
+       else alert("teraz toto pravidlo použiť nemôžeš, skús iné pravidlo");
+       }
+    }
+    else alert("najrpv vytvor počiatočný vzor");
   }
-  else alert("najrpv vytvor počiatočný vzor");//alert("aktuálny vzor nespĺňa kliknuté pravidlo, skús iné pravidlo");
 });
+
 
 //klikanie na posledne vytvorene slovo
 $(document).on('click', '.aktw.last', function(){
-    //zmazanie posledneho slova
-    aktWordsUser.pop();
-    usedRulesUser.pop();
-    //kontrola ci existuju predchadzauje pravidla - class first ma len prvy ktory sa nema mazat
-    if(!$(this).prev().hasClass('first')){
-      $(this).prev().addClass('last');
+    //zmazanie posledneho slova ak hra neni pauznuta pri vitazstve
+    if(localStorage.getItem('MShra') != "stop"){
+      aktWordsUser.pop();
+      usedRulesUser.pop();
+      //kontrola ci existuju predchadzauje pravidla - class first ma len prvy ktory sa nema mazat
+      if(!$(this).prev().hasClass('first')){
+        $(this).prev().addClass('last').removeClass('hidden');
+      }
+      $(this).remove();
+      $('.aktrule').last().remove();
     }
-    $(this).remove();
-    $('.aktrule').last().remove();
 });
 
 //nastavenie pre menu
 $("#show-rules").on('change', function(){
   if($(this).prop('checked')) {
+    $(".aktw").each(function(){
+      if(!$(this).hasClass('first') && !$(this).hasClass('last')){
+        $(this).removeClass('hidden');
+      }
+    });
     $("#aktRule").removeClass('hidden');
   }
-  else $("#aktRule").addClass('hidden');
+  else {
+    $(".aktw").each(function(){
+      if(!$(this).hasClass('first') && !$(this).hasClass('last')){
+        $(this).addClass('hidden');
+      }
+    });
+    $("#aktRule").addClass('hidden');
+  }
 });
 
 });
@@ -196,7 +252,7 @@ function allowDrop(ev) {
 }
 
 function drag(ev) {
-  ev.target.setAttribute("onclick","remove(event);");
+  //ev.target.setAttribute("onclick","remove(event);");
   ev.dataTransfer.setData("text", ev.target.id);
 }
 
@@ -206,14 +262,15 @@ function drop(ev) {
   count++; //pridavanie cisla pre nove id elementu
   ev.preventDefault();
   var data = ev.dataTransfer.getData("text");
-  ev.target.appendChild(document.getElementById(data));
+
+  //ev.target.appendChild(document.getElementById(data));
 
   //vytvorenie kopie, ktora ma obmenene id a zruseny event na mazanie
-
   var cln = document.getElementById(data).cloneNode(true);
   cln.setAttribute("id", cln.getAttribute("id")+count);
-  cln.removeAttribute("onclick");
-  document.getElementById("draggable").appendChild(cln);
+  cln.setAttribute("onclick","remove(event);");
+  ev.target.appendChild(cln);
+  //document.getElementById("draggable").appendChild(cln);
 
   //zobrazenie sipky pre start po pridani aspon jedneho komponentu slova
   var wordImage = document.getElementById("start").getElementsByTagName('img');
@@ -238,9 +295,11 @@ function getStartWord(){
 
   for(var i=0; i<wordImage.length; i++){
       word += wordImage[i].getAttribute("data-val");
-      $(wordWrap).append("<img src='"+path+"/"+wordImage[i].getAttribute("data-val")+".png'/>");
+      $(wordWrap).append("<img src='"+path+"/"+wordImage[i].getAttribute("data-val")+".png' width='40' height='40'/>");
   }
-  $("#aktWord").html('').append(wordWrap);
+  if(wordImage.length <=5){
+     $("#aktWord").html('').append(wordWrap);
+  }
   return word;
 }
 
@@ -263,8 +322,15 @@ function resetValues(){
 //reset spolu so startovnymi slovami
 function resetGame(){
   resetValues();
+  $("#win").removeClass('disp');
   $("#start").html("");
   $(".aktw").remove();
+  $("#draggable img").each(function(){
+    $(this).attr('draggable', true);
+  });
+  $('.pravidlo').each(function(){
+    $(this).removeClass('gameStop');
+  });
 }
 
 function startGame(){
@@ -278,15 +344,18 @@ function startGame(){
   else{
     //generovanie slova
     console.log(rules);
-    for(var i=0; i<set_n; i++){
-       //var apply = 1; //pomocna premenna
+
+    var lv = localStorage.getItem('MSlevel'); //lv na zaciatku je 1
+
+    //
+    for(var i=0; i<parseInt(lv)+set_n-1; i++){
       //nahodne zvolene pravidlo
       //kym sa neaplikuje aspon jedno pravidlo
       var limit = 0;
       while(limit <500){
         limit++;
         var rule = rules[Math.floor(Math.random() * rules.length)];
-        //console.log(aktw, aktw.indexOf(rule[0]), rule[0]);
+
         if(aktw.indexOf(rule[0]) >= 0){
            //prepis akt slova a zapisanie do pola
            aktw = aktw.replace(rule[0], rule[1]);
@@ -301,7 +370,7 @@ function startGame(){
      console.log(aktw, aktw.length);
      generatedGoals.push(aktw);
      for(var i=0; i<aktw.length; i++){
-         $("#goal").append("<img src='"+path+"/"+aktw.charAt(i)+".png'/>");
+         $("#goal").append("<img src='"+path+"/"+aktw.charAt(i)+".png' width='40' height='40'/>");
      }
   }
 }
